@@ -3,11 +3,16 @@ const dotenv = require('dotenv');
 const cors = require('cors'); // Import cors
 const connectDB = require('./config/db');
 
+const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes');
+
 // Load environment variables
 dotenv.config();
 
 // Connect to database
 connectDB();
+
+
 
 const app = express();
 
@@ -20,6 +25,8 @@ app.get('/', (req, res) => {
   res.send('API is running...');
 });
 
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
 // Mount API routes here later
 // app.use('/api/auth', require('./routes/authRoutes'));
 // app.use('/api/books', require('./routes/bookRoutes'));
