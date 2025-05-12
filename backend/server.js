@@ -1,10 +1,13 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const cors = require('cors'); // Import cors
+const cors = require('cors');
 const connectDB = require('./config/db');
 
+// Import routes
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
+const bookRoutes = require('./routes/bookRoutes'); // Import book routes
+// Import trade routes later...
 
 // Load environment variables
 dotenv.config();
@@ -12,25 +15,24 @@ dotenv.config();
 // Connect to database
 connectDB();
 
-
-
 const app = express();
 
 // Middleware
-app.use(cors()); // Use cors middleware
-app.use(express.json()); // Body parser for JSON data
+app.use(cors());
+app.use(express.json());
 
-// Define a simple root route (for testing)
+// Mount API routes
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/books', bookRoutes); // Mount book routes
+// Mount trade routes later:
+// app.use('/api/trades', tradeRoutes);
+
+
+// Simple root route (for testing) - can remove later
 app.get('/', (req, res) => {
   res.send('API is running...');
 });
-
-app.use('/api/auth', authRoutes);
-app.use('/api/users', userRoutes);
-// Mount API routes here later
-// app.use('/api/auth', require('./routes/authRoutes'));
-// app.use('/api/books', require('./routes/bookRoutes'));
-// app.use('/api/trades', require('./routes/tradeRoutes'));
 
 
 const PORT = process.env.PORT || 5000;
