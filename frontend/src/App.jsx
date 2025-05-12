@@ -1,35 +1,52 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Routes, Route, Link } from 'react-router-dom';
+import './App.css'; // Your main app styling
+// Import or create placeholder components for your pages
+import HomePage from './pages/HomePage'; // We'll create this
+import LoginPage from './pages/LoginPage'; // We'll create this
+import RegisterPage from './pages/RegisterPage'; // We'll create this
+import SettingsPage from './pages/SettingsPage'; // We'll create this
+import AddBookPage from './pages/AddBookPage'; // We'll create this
+// import TradePage from './pages/TradePage'; // For later
+// import NotFoundPage from './pages/NotFoundPage'; // Good practice
+
 
 function App() {
-  const [count, setCount] = useState(0)
+  // You'll manage auth state (like the token and user info) here or in a context later
+  // For now, we'll just set up the routes
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      {/* Basic Navigation (You can make this a separate component later) */}
+      <nav>
+        <ul>
+          <li><Link to="/">Home</Link></li>
+          {/* Show Login/Register if not logged in */}
+          {/* Show Add Book, Settings, etc. if logged in */}
+          <li><Link to="/login">Login</Link></li>
+          <li><Link to="/register">Register</Link></li>
+          <li><Link to="/settings">Settings</Link></li>
+          <li><Link to="/add-book">Add Book</Link></li>
+          {/* <li><Link to="/trades">Trades</Link></li> */}
+          {/* Add Logout button here later */}
+        </ul>
+      </nav>
+
+      {/* Define your routes */}
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        {/* These routes will need protection later */}
+        <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/add-book" element={<AddBookPage />} />
+        {/* <Route path="/trades" element={<TradePage />} /> */}
+        {/* Add a catch-all for 404 later */}
+        {/* <Route path="*" element={<NotFoundPage />} /> */}
+      </Routes>
+
+      <footer>{/* Your footer here */}</footer>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
