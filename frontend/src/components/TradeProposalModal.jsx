@@ -101,6 +101,8 @@ function TradeProposalModal({ targetBook, onClose, onTradeProposed }) {
         offeredBookIds: [selectedOfferedBookId], // Offering the selected book (backend supports array)
       };
 
+      console.log('Sending trade proposal data:', tradeData);
+
       const response = await axios.post(`${API_URL}/trades`, tradeData, config);
 
       console.log('Trade proposed successfully:', response.data);

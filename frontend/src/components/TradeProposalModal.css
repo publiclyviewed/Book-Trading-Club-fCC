@@ -46,6 +46,7 @@
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.2s ease;
+    color: #333;
 }
 
 .user-book-item:hover {
@@ -55,6 +56,7 @@
 .user-book-item.selected {
     border-color: #007bff; /* Highlight color */
     background-color: #e9f5ff;
+    color: #333;
 }
 
 .user-book-item input[type="radio"] {

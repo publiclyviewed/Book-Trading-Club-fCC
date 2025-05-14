@@ -6,6 +6,8 @@ import { useAuth } from '../context/AuthContext'; // Import useAuth
 // Get the backend URL from the environment variable
 const API_URL = import.meta.env.VITE_REACT_APP_BACKEND_URL || 'http://localhost:5000/api';
 
+console.log('LoginPage component is attempting to render.');
+
 function LoginPage() {
   const [formData, setFormData] = useState({
     username: '',
