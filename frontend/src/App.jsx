@@ -8,25 +8,24 @@ import SettingsPage from './pages/SettingsPage';
 import AddBookPage from './pages/AddBookPage';
 // Import the ProtectedRoute component
 import ProtectedRoute from './components/ProtectedRoute';
-// import TradePage from './pages/TradePage'; // For later
-// import NotFoundPage from './pages/NotFoundPage'; // Good practice
+// Import the useAuth hook
+import { useAuth } from './context/AuthContext';
+
+import TradePage from './pages/TradePage'; 
 
 
 function App() {
-  // We'll manage auth state (like isLoggedIn) more dynamically later
-  // For now, ProtectedRoute does the localStorage check directly
+  // Get auth state and logout function from context
+  const { isAuthenticated, logout, user } = useAuth();
 
-  // Function to handle logout (clear token and redirect)
+  // Handle logout using the context function
   const handleLogout = () => {
-    localStorage.removeItem('token'); // Remove token from localStorage
-    localStorage.removeItem('userInfo'); // Also remove user info if stored
-    // You might want to make a backend call to invalidate the token on the server too
-    window.location.href = '/login'; // Simple redirect, or use navigate('/')
+    logout(); // Call the logout function from context
+    // Context logout also clears localStorage and sets user to null
+    // The ProtectedRoute component will handle redirection on protected routes
+    // You might want a programmatic navigate here if you want to land on a specific page
+    // navigate('/login'); // Requires useNavigate hook from react-router-dom
   };
-
-
-  // Determine if user is logged in for conditional navigation links
-  const isLoggedIn = localStorage.getItem('token'); // Simple check
 
 
   return (
@@ -35,18 +34,20 @@ function App() {
       <nav>
         <ul>
           <li><Link to="/">Home</Link></li>
-          {/* Conditionally render links based on login status */}
-          {!isLoggedIn ? (
+          {/* Conditionally render links based on isAuthenticated from context */}
+          {!isAuthenticated ? (
             <>
               <li><Link to="/login">Login</Link></li>
               <li><Link to="/register">Register</Link></li>
             </>
           ) : (
             <>
+              {/* Display username or name */}
+               {user && <li>Hello, {user.username || user.fullName}!</li>}
               <li><Link to="/settings">Settings</Link></li>
               <li><Link to="/add-book">Add Book</Link></li>
-              {/* <li><Link to="/trades">Trades</Link></li> */}
-              <li><button onClick={handleLogout} style={{ cursor: 'pointer' }}>Logout</button></li> {/* Simple button for now */}
+              <li><Link to="/trades">Trades</Link></li> {/* Link for Trades page (create later) */}
+              <li><button onClick={handleLogout} style={{ cursor: 'pointer' }}>Logout</button></li>
             </>
           )}
         </ul>
@@ -56,8 +57,10 @@ function App() {
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+        {/* Only show Login/Register if not authenticated? Optional. */}
+        {!isAuthenticated && <Route path="/login" element={<LoginPage />} />}
+        {!isAuthenticated && <Route path="/register" element={<RegisterPage />} />}
+
 
         {/* Protected Routes - Wrap the element with ProtectedRoute */}
         <Route
@@ -76,16 +79,15 @@ function App() {
             </ProtectedRoute>
           }
         />
-
-        {/* Protected Trade Route (for later) */}
-        {/* <Route
-          path="/trades"
-          element={
-            <ProtectedRoute>
-              <TradePage />
-            </ProtectedRoute>
-          }
-        /> */}
+         {/* Protected Trade Route (create TradePage later) */}
+         <Route
+           path="/trades"
+           element={
+             <ProtectedRoute>
+               <TradePage /> {/* Need to create TradePage */}
+             </ProtectedRoute>
+           }
+         />
 
 
         {/* Add a catch-all for 404 later */}
@@ -98,3 +100,7 @@ function App() {
 }
 
 export default App;
+
+// Create a placeholder TradePage.jsx in frontend/src/pages
+// function TradePage() { return <div><h2>Trade Requests</h2><p>Trade UI here</p></div>; }
+// export default TradePage;

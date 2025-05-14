@@ -1,0 +1,113 @@
+/* Simple styling for the modal overlay and content */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Make sure it's above other content */
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 500px; /* Limit modal width */
+    width: 90%; /* Use a percentage for responsiveness */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    max-height: 80vh; /* Limit max height */
+    overflow-y: auto; /* Add scrolling if content exceeds max height */
+    display: flex;
+    flex-direction: column; /* Stack content vertically */
+}
+
+.modal-content h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.user-books-list {
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.user-book-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.user-book-item:hover {
+    background-color: #f9f9f9;
+}
+
+.user-book-item.selected {
+    border-color: #007bff; /* Highlight color */
+    background-color: #e9f5ff;
+}
+
+.user-book-item input[type="radio"] {
+    margin-right: 10px;
+    /* Hide default radio button and style label if preferred */
+}
+
+.user-book-item label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    flex-grow: 1; /* Allows label to take available space */
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end; /* Align buttons to the right */
+    gap: 10px; /* Space between buttons */
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.modal-actions button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.modal-actions button:first-child { /* Submit button style */
+    background-color: #007bff;
+    color: white;
+}
+
+.modal-actions button:first-child:disabled {
+     background-color: #cccccc;
+     cursor: not-allowed;
+}
+
+
+.modal-actions button:last-child { /* Cancel button style */
+    background-color: #f8f9fa;
+    color: #333;
+    border: 1px solid #ccc;
+}
+
+.modal-actions button:last-child:disabled {
+     cursor: not-allowed;
+}
+
+/* Optional: Add basic styling for the image */
+.user-book-item label img {
+    margin-right: 10px;
+}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext'; // Import useAuth
 
 // Get the backend URL from the environment variable
 const API_URL = import.meta.env.VITE_REACT_APP_BACKEND_URL || 'http://localhost:5000/api';
@@ -14,15 +15,15 @@ function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const { isAuthenticated, login } = useAuth(); // Get isAuthenticated and login from context
 
-  // Optional: Check if user is already logged in on mount
+
+  // If user is already authenticated via context, redirect
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      // If token exists, redirect to home page or a dashboard
-      navigate('/'); // Or a protected route like '/dashboard'
+    if (isAuthenticated) {
+      navigate('/');
     }
-  }, [navigate]); // Depend on navigate to avoid lint warnings
+  }, [isAuthenticated, navigate]); // Depend on isAuthenticated and navigate
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -35,26 +36,15 @@ function LoginPage() {
     setError(null);
 
     try {
-      // Make the POST request to your backend login endpoint
       const response = await axios.post(`${API_URL}/auth/login`, formData);
 
-      // Assuming login is successful, response.data contains user info and token
-      console.log('Login successful:', response.data);
+      // Use the login function from context
+      login(response.data.token, response.data); // Pass token and user data
 
-      // *** Crucially: Store the JWT ***
-      // localStorage is a simple way to store the token in the browser
-      // Note: localStorage is vulnerable to XSS attacks. For production, consider
-      // more secure methods like HttpOnly cookies if appropriate for your architecture.
-      localStorage.setItem('token', response.data.token);
-      // You might also store basic user info (like username, id) if needed frequently
-       localStorage.setItem('userInfo', JSON.stringify(response.data));
-
-
-      // Redirect to home page or a protected route after login
-      navigate('/'); // Or navigate('/settings') etc.
+      console.log('Login successful');
+      // The useEffect above will handle redirection based on isAuthenticated changing
 
     } catch (err) {
-      // Handle errors (e.g., invalid credentials)
       console.error('Login error:', err.response ? err.response.data : err.message);
       setError(err.response ? err.response.data.message : 'An error occurred');
     } finally {
@@ -66,6 +56,7 @@ function LoginPage() {
     <div>
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
+        {/* ... form inputs remain the same ... */}
         <div>
           <label htmlFor="username">Username:</label>
           <input
@@ -95,8 +86,6 @@ function LoginPage() {
       </form>
 
        {error && <p style={{ color: 'red' }}>{error}</p>}
-
-       {/* Link to registration page */}
        <p>Don't have an account? <Link to="/register">Register here</Link></p>
     </div>
   );
