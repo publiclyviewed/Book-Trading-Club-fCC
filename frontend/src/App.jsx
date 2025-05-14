@@ -1,45 +1,93 @@
 import { Routes, Route, Link } from 'react-router-dom';
-import './App.css'; // Your main app styling
-// Import or create placeholder components for your pages
-import HomePage from './pages/HomePage'; // We'll create this
-import LoginPage from './pages/LoginPage'; // We'll create this
-import RegisterPage from './pages/RegisterPage'; // We'll create this
-import SettingsPage from './pages/SettingsPage'; // We'll create this
-import AddBookPage from './pages/AddBookPage'; // We'll create this
+import './App.css';
+// Import your page components
+import HomePage from './pages/HomePage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import SettingsPage from './pages/SettingsPage';
+import AddBookPage from './pages/AddBookPage';
+// Import the ProtectedRoute component
+import ProtectedRoute from './components/ProtectedRoute';
 // import TradePage from './pages/TradePage'; // For later
 // import NotFoundPage from './pages/NotFoundPage'; // Good practice
 
 
 function App() {
-  // You'll manage auth state (like the token and user info) here or in a context later
-  // For now, we'll just set up the routes
+  // We'll manage auth state (like isLoggedIn) more dynamically later
+  // For now, ProtectedRoute does the localStorage check directly
+
+  // Function to handle logout (clear token and redirect)
+  const handleLogout = () => {
+    localStorage.removeItem('token'); // Remove token from localStorage
+    localStorage.removeItem('userInfo'); // Also remove user info if stored
+    // You might want to make a backend call to invalidate the token on the server too
+    window.location.href = '/login'; // Simple redirect, or use navigate('/')
+  };
+
+
+  // Determine if user is logged in for conditional navigation links
+  const isLoggedIn = localStorage.getItem('token'); // Simple check
+
 
   return (
     <>
-      {/* Basic Navigation (You can make this a separate component later) */}
+      {/* Basic Navigation */}
       <nav>
         <ul>
           <li><Link to="/">Home</Link></li>
-          {/* Show Login/Register if not logged in */}
-          {/* Show Add Book, Settings, etc. if logged in */}
-          <li><Link to="/login">Login</Link></li>
-          <li><Link to="/register">Register</Link></li>
-          <li><Link to="/settings">Settings</Link></li>
-          <li><Link to="/add-book">Add Book</Link></li>
-          {/* <li><Link to="/trades">Trades</Link></li> */}
-          {/* Add Logout button here later */}
+          {/* Conditionally render links based on login status */}
+          {!isLoggedIn ? (
+            <>
+              <li><Link to="/login">Login</Link></li>
+              <li><Link to="/register">Register</Link></li>
+            </>
+          ) : (
+            <>
+              <li><Link to="/settings">Settings</Link></li>
+              <li><Link to="/add-book">Add Book</Link></li>
+              {/* <li><Link to="/trades">Trades</Link></li> */}
+              <li><button onClick={handleLogout} style={{ cursor: 'pointer' }}>Logout</button></li> {/* Simple button for now */}
+            </>
+          )}
         </ul>
       </nav>
 
       {/* Define your routes */}
       <Routes>
+        {/* Public Routes */}
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        {/* These routes will need protection later */}
-        <Route path="/settings" element={<SettingsPage />} />
-        <Route path="/add-book" element={<AddBookPage />} />
-        {/* <Route path="/trades" element={<TradePage />} /> */}
+
+        {/* Protected Routes - Wrap the element with ProtectedRoute */}
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <SettingsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/add-book"
+          element={
+            <ProtectedRoute>
+              <AddBookPage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Protected Trade Route (for later) */}
+        {/* <Route
+          path="/trades"
+          element={
+            <ProtectedRoute>
+              <TradePage />
+            </ProtectedRoute>
+          }
+        /> */}
+
+
         {/* Add a catch-all for 404 later */}
         {/* <Route path="*" element={<NotFoundPage />} /> */}
       </Routes>

@@ -6,8 +6,9 @@ const connectDB = require('./config/db');
 // Import routes
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
-const bookRoutes = require('./routes/bookRoutes'); // Import book routes
-// Import trade routes later...
+const bookRoutes = require('./routes/bookRoutes');
+const tradeRoutes = require('./routes/tradeRoutes'); // Import trade routes
+
 
 // Load environment variables
 dotenv.config();
@@ -24,9 +25,8 @@ app.use(express.json());
 // Mount API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
-app.use('/api/books', bookRoutes); // Mount book routes
-// Mount trade routes later:
-// app.use('/api/trades', tradeRoutes);
+app.use('/api/books', bookRoutes);
+app.use('/api/trades', tradeRoutes); // Mount trade routes
 
 
 // Simple root route (for testing) - can remove later
