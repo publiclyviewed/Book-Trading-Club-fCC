@@ -1,0 +1,8 @@
+# frontend/netlify.toml
+[build]
+base = "." # Base directory for this build is the current directory (frontend)
+publish = "dist" # Publish the contents of the dist folder relative to this base
+
+[build.environment]
+# Set environment variables specifically for the build process
+VITE_REACT_APP_BACKEND_URL = "YOUR_RENDER_BACKEND_URL/api" # Replace with your Render URL
