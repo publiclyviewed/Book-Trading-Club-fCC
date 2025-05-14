@@ -22,3 +22,21 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Ignore environment files
+.env
+
+# Ignore frontend build output
+/frontend/build
+/frontend/dist
+
+# Ignore backend dependencies
+/backend/node_modules
+
+# Ignore frontend dependencies
+/frontend/node_modules
+
+# Ignore gh-pages deployment branch directory
+.cache/
+.parcel-cache/
+dist/
